@@ -1,0 +1,8 @@
+{% extends 'index.html' %}
+{% block content %}
+
+    <form method="POST" >{% csrf_token %}
+        {{ form.as_table}}
+        <button type="submit" class="btn-default">수정하기</button>
+    </form>
+{% endblock %}
