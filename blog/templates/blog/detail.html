@@ -1,0 +1,14 @@
+{% extends 'index.html' %}
+{% block  content %}
+   
+    {% for comment in blog.comments.all %}
+        <h3>{{ comment.comment_text }}</h3>
+        <a href="{% url 'edit_comm' comment.id %}">수정</a>
+        <a href="{% url 'remove_comm' comment.id %}">삭제</a> <br><hr><br>
+    {% endfor %}
+    <form method="post">
+        {% csrf_token %}
+        {{form}}
+        <input class="btn btn-primary" type="submit" value="작성">
+    </form>
+{% endblock %}

@@ -26,4 +26,7 @@ urlpatterns = [
     path('blog/newblog/', blog.views.blogform, name='newblog'),
     path('blog/<int:pk>/edit/', blog.views.edit, name='edit'),
     path('blog/<int:pk>/remove/', blog.views.remove, name='remove'),
+    path("blog/<int:title_id>/detail", blog.views.detail, name="detail"),
+    path("blog/<int:title_id>/detail/edit_comm/", blog.views.edit_comm, name="edit_comm"),
+    path('blog/<int:pk>/remove_comm/', blog.views.remove_comm, name='remove_comm'),
 ]

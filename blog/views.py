@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
-from .forms import BlogForm
-from .models import Blog
+from .forms import BlogForm, CommentForm
+from .models import Blog, Comment
 
 # Create your views here.
 def layout(request):
@@ -43,3 +43,49 @@ def remove(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
     blog.delete()
     return redirect('home')
+
+def detail(request, title_id):
+   blog = get_object_or_404(Blog, id=title_id)
+   if request.method == "POST":
+      form = CommentForm(request.POST)
+      if form.is_valid():
+         comment = form.save(commit=False)
+         comment.title_id = blog
+         comment.comment_text = form.cleaned_data["comment_text"]
+         comment.save()
+         return redirect('detail', title_id)
+   else:
+      form = CommentForm()
+      return render(request, "blog/detail.html", {"blog": blog, "form":form})
+
+# def edit_comm(request, pk):
+#    comment = get_object_or_404(Comment, pk=pk)
+#    return commentform(request, comment)
+
+def edit_comm(request, title_id):
+   comment = get_object_or_404(Comment, pk=title_id)
+   return commentform(request, comment)
+
+
+#comment 수정 시 사용할 함수
+def commentform(request, comment=None):
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.comment_text = form.cleaned_data["comment_text"]
+            comment.save()
+            return redirect('home')
+            # return redirect('detail', comment.title_id)
+            # return render(request, 'blog/detail.html', {'comment':comment})
+    else:
+        #GET방식으로 요청이 들어왔을 때 실행할 코드
+        form = CommentForm(instance=comment)
+        return render(request, 'blog/edit_comm.html', {'form':form})
+
+def remove_comm(request, pk):
+   comment = get_object_or_404(Comment, pk=pk)
+   comment.delete()
+   # return redirect('detail', comment.title_id)
+   return redirect('home')
+
