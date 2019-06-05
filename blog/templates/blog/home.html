@@ -6,9 +6,17 @@
         <h2><a href="{% url 'detail' blog.id %}">{{ blog.title }}</a> </h2>
         <p>{{ blog.pub_date }}</p>
         <p>{{ blog.body }}</p>
+        {% if blog.image %}
+            <img style="width: 200px; height: 200px;"  src="{{ blog.image.url }}">
+        {% endif %}
+        <br>
+        {% for hashtag in blog.hashtags.all %}
+        <span style="color: darkgrey">{{ hashtag.name }}</span>
+        {% endfor %}<br><br>    
+        
         <a href="{% url 'edit' pk=blog.pk %}">수정</a>
-        <!-- <a href="#portfolio-modal-2">수정</a> -->
-        <a href="{% url 'remove' pk=blog.pk %}">삭제</a> <br> <hr> <br>
+        <a href="{% url 'remove' pk=blog.pk %}">삭제</a> 
+        <hr> <br>
     {% endfor %}
 
 {% endblock %}

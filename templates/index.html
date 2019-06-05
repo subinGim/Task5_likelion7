@@ -33,7 +33,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Posts</a>
+      <a class="navbar-brand js-scroll-trigger" href="{% url 'home' %}">Start Posts</a>
       <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         Menu
         <i class="fas fa-bars"></i>
@@ -49,8 +49,26 @@
           <li class="nav-item mx-0 mx-lg-1">
             <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">LION</a>
           </li>
+          <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'hashtag' %}">ADD HASHTAG</a>
+            </li>
         </ul>
       </div>
+
+      <!--hashtag searcher-->
+      <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            hashtag
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for hashtag in hashtags.all %}
+            <a class="dropdown-item" href="{% url 'search' hashtag.id %}">{{hashtag.name}}</a>
+            {% endfor %}
+          </div>
+        </div>
+
+
     </div>
   </nav>
 
@@ -65,8 +83,8 @@
   </header>
 
   <!-- Portfolio Grid Section -->
-  
-  <section class="portfolio" id="portfolio">
+  {% block searcher %}
+  <section class="portfolio text-center" id="portfolio">
       
     <div class="container">
       <h2 class="text-center text-uppercase text-secondary mb-0">Posts</h2>
@@ -139,8 +157,9 @@
         </div> -->
       </div>
     </div>
-  </section>
 
+  </section>
+{% endblock %}
   <!-- About Section
   <section class="bg-primary text-white mb-0" id="about">
     <div class="container">
@@ -289,12 +308,16 @@
             <!-- <img class="img-fluid mb-5" src="{% static 'img/portfolio/cabin.png' %}" alt="">
             <p class="mb-5"></p> -->
 
-            <form action="{% url 'create' %}">
-              <h4>제목: </h4>
+            <form action="{% url 'create' %}" enctype="multipart/form-data">
+              <h4>제목(Title) </h4>
               <input type="text" name="title">
-              <h4>본문: </h4>
-              <textarea cols=40 rows=10 name="body"></textarea><br>
+              <h4>본문(Body) </h4>
+              <textarea cols=40 rows=10 name="body"></textarea><br><br>
+              <h4 style="display: inline">이미지 첨부: </h4>
+              <input type="file" name="image"><br><br>
               <input class="btn btn-dark" type="submit" value="제출하기">
+              
+              
             </form>
 
             <!-- <form method="POST">

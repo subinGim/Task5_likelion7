@@ -1,14 +1,36 @@
 {% extends 'index.html' %}
-{% block  content %}
-   
-    {% for comment in blog.comments.all %}
-        <h3>{{ comment.comment_text }}</h3>
-        <a href="{% url 'edit_comm' comment.id %}">수정</a>
-        <a href="{% url 'remove_comm' comment.id %}">삭제</a> <br><hr><br>
-    {% endfor %}
-    <form method="post">
-        {% csrf_token %}
-        {{form}}
-        <input class="btn btn-primary" type="submit" value="작성">
-    </form>
+{% block  searcher %}
+<section class="portfolio text-center" id="portfolio">
+      
+        <div class="container">
+          <h2 class="text-center text-uppercase text-secondary mb-0">comments</h2><br>
+          <h4 class="text-center text-secondary mb-0">post title : "{{blog.title}}"</h4><br>
+          <h4 class="text-center text-secondary mb-0">post content : "{{blog.body}}"</h4>
+          <hr class="star-dark mb-5">
+          <div class="row">
+            <div class="col-md-6 col-lg-4">
+              
+                    {% for blog in blogs.all %}
+                    <h2>{{blog.title}}</h2>
+                    <p>{{blog.body}}</p>
+                {% endfor %}
+                {% for comment in blog.comments.all %}
+                    <h3>{{ comment.comment_text }}</h3>
+                    <a href="{% url 'edit_comm' comment.id %}">수정</a>
+                    <a href="{% url 'remove_comm' comment.id %}">삭제</a> <br><hr><br>
+                {% endfor %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{form}}
+                    <input class="btn btn-primary" type="submit" value="작성">
+                </form>
+    
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+    
 {% endblock %}

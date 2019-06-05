@@ -1,8 +1,23 @@
 {% extends 'index.html' %}
-{% block content %}
+{% block searcher %}
+<section class="portfolio text-center" id="portfolio">
+      
+        <div class="container">
+          <h2 class="text-center text-uppercase text-secondary mb-0">edit post</h2><br>
+          <hr class="star-dark mb-5">
+          <div class="row">
+            <div class="col-md-6 col-lg-4">
 
-    <form method="POST" >{% csrf_token %}
-        {{ form.as_table}}
-        <button type="submit" class="btn btn-primary">수정하기</button>
-    </form>
+        <form method="POST" >
+            {% csrf_token %}
+            {{ form.as_table }}<br><br>
+                <button type="submit" class="btn btn-primary">수정하기</button>
+        </form>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+    
 {% endblock %}

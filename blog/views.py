@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
-from .forms import BlogForm, CommentForm
-from .models import Blog, Comment
+from .forms import BlogForm, CommentForm, HashtagForm
+from .models import Blog, Comment, Hashtag
 
 # Create your views here.
 def layout(request):
@@ -9,7 +9,8 @@ def layout(request):
 
 def home(request):
    blogs = Blog.objects
-   return render(request, 'blog/home.html', {'blogs': blogs})
+   hashtags = Hashtag.objects
+   return render(request, 'blog/home.html', {'blogs': blogs, 'hashtags':hashtags})
 
 def new(request):
     return render(request, 'blog/new.html') #해당 페이지에 데이터까지 포함해서 전달하는 느낌
@@ -18,17 +19,19 @@ def create(request):
     blog = Blog()
     blog.title = request.GET['title']
     blog.body = request.GET['body']
+    blog.image = request.GET['image'] #######추가
     blog.pub_date = timezone.datetime.now()
     blog.save()
     return redirect('/blog/home/') #바로 페이지를 띄워버리는 느낌
 
 def blogform(request, blog=None):
     if request.method == 'POST':
-        form = BlogForm(request.POST, instance=blog)
+        form = BlogForm(request.POST, request.FILES, instance=blog)
         if form.is_valid():
             blog = form.save(commit=False) #폼에 있는 데이터만 가져옴. 저장X 이때 시간데이터는 가져오지 않았기 때문에.
             blog.pub_date=timezone.now()
             blog.save()
+            form.save_m2m()
             return redirect('home')
     else:
         #GET방식으로 요청이 들어왔을 때 실행할 코드
@@ -89,3 +92,24 @@ def remove_comm(request, pk):
    # return redirect('detail', comment.title_id)
    return redirect('home')
 
+def hashtagform(request, hashtag=None):
+   if request.method == 'POST':
+      form = HashtagForm(request.POST, instance=hashtag)
+      if form.is_valid():
+         hashtag = form.save(commit=False)
+         if Hashtag.objects.filter(name=form.cleaned_data['name']):
+            form = HashtagForm()
+            error_message = "이미 존재하는 해시태그 입니다"
+            return render(request, 'blog/hashtag.html', {'form':form, "error_message":error_message})
+         else:
+            hashtag.name = form.cleaned_data['name']
+            hashtag.save()
+            return redirect('home')
+   else:
+      form = HashtagForm(instance=hashtag)
+      return render(request, 'blog/hashtag.html', {'form':form})
+
+def search(request, hashtag_id):
+   hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
+   hashtags = Hashtag.objects
+   return render(request, 'blog/search.html', {'hashtag': hashtag, 'hashtags':hashtags})
