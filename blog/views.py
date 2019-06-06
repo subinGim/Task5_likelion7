@@ -16,13 +16,23 @@ def new(request):
     return render(request, 'blog/new.html') #해당 페이지에 데이터까지 포함해서 전달하는 느낌
 
 def create(request):
-    blog = Blog()
-    blog.title = request.GET['title']
-    blog.body = request.GET['body']
-    blog.image = request.GET['image'] #######추가
-    blog.pub_date = timezone.datetime.now()
-    blog.save()
-    return redirect('/blog/home/') #바로 페이지를 띄워버리는 느낌
+   blog = Blog()
+   if request.method == 'POST':
+      blog.image = request.FILES['image']
+      blog.title = request.POST['title']
+      blog.body = request.POST['body']
+      blog.pub_date = timezone.datetime.now()
+      blog.save()
+      return redirect('home')
+
+
+   #  blog = Blog()
+   #  blog.title = request.GET['title']
+   #  blog.body = request.GET['body']
+   #  blog.image = request.GET['image'] 
+   #  blog.pub_date = timezone.datetime.now()
+   #  blog.save()
+   #  return redirect('/blog/home/') #바로 페이지를 띄워버리는 느낌
 
 def blogform(request, blog=None):
     if request.method == 'POST':
@@ -30,6 +40,7 @@ def blogform(request, blog=None):
         if form.is_valid():
             blog = form.save(commit=False) #폼에 있는 데이터만 가져옴. 저장X 이때 시간데이터는 가져오지 않았기 때문에.
             blog.pub_date=timezone.now()
+            blog.image = request.FILES['image']
             blog.save()
             form.save_m2m()
             return redirect('home')

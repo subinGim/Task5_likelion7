@@ -17,6 +17,13 @@
               {% if blog.image %}
                   <img style="width: 200px; height: 200px;"  src="{{ blog.image.url }}">
               {% endif %}
+              <br><br>
+              {% for hashtag in blog.hashtags.all %}
+                  <span style="color: darkgrey">{{ hashtag.name }}</span>
+              {% endfor %}  
+
+
+
               <hr>
           {% endfor %}
     

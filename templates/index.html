@@ -308,7 +308,8 @@
             <!-- <img class="img-fluid mb-5" src="{% static 'img/portfolio/cabin.png' %}" alt="">
             <p class="mb-5"></p> -->
 
-            <form action="{% url 'create' %}" enctype="multipart/form-data">
+            <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
               <h4>제목(Title) </h4>
               <input type="text" name="title">
               <h4>본문(Body) </h4>

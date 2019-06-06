@@ -7,9 +7,10 @@
         <p>{{ blog.pub_date }}</p>
         <p>{{ blog.body }}</p>
         {% if blog.image %}
-            <img style="width: 200px; height: 200px;"  src="{{ blog.image.url }}">
+            <img style="width: 300px; height: 300px;"  src="{{ blog.image.url }}">
+            <br><br>
         {% endif %}
-        <br>
+        
         {% for hashtag in blog.hashtags.all %}
         <span style="color: darkgrey">{{ hashtag.name }}</span>
         {% endfor %}<br><br>    
