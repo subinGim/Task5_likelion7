@@ -50,6 +50,9 @@
             <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">LION</a>
           </li>
           <li class="nav-item mx-0 mx-lg-1">
+            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'new' %}">NEW POST</a>
+          </li>
+          <li class="nav-item mx-0 mx-lg-1">
               <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'hashtag' %}">ADD HASHTAG</a>
             </li>
         </ul>
@@ -311,14 +314,21 @@
             <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <h4>제목(Title) </h4>
-              <input type="text" name="title">
+              <input type="text" name="title"><br><br>
               <h4>본문(Body) </h4>
               <textarea cols=40 rows=10 name="body"></textarea><br><br>
               <h4 style="display: inline">이미지 첨부: </h4>
               <input type="file" name="image"><br><br>
+              <h4>해시태그 선택: </h4>          
+                  <select multiple name="hash">
+                    {% for hashtag in hashtags.all %}
+                      <option value="{{hashtag.id}}">{{ hashtag.name }}</option>
+                    {% endfor %}
+                  </select>
+              
+              <br><br>
+              
               <input class="btn btn-dark" type="submit" value="제출하기">
-              
-              
             </form>
 
             <!-- <form method="POST">
